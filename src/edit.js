@@ -59,11 +59,7 @@ export default function Edit(props) {
 		];
 
 		for (const article of data) {
-			list.push({
-				value: article.attributes.id,
-				label: article.attributes.title,
-				meta: article.meta?.presenter?.dropdown ?? {}
-			});
+			list.push(article.meta?.presenter?.dropdown ?? {});
 		}
 
 		setArticles(list);
