@@ -115,16 +115,16 @@ export default function Edit(props) {
 								hideLabelFromVision={true}
 								onChange={(value) => {
 									const articleData = articles.filter( ( article ) => article.value === value)[0];
-									setAttributes({data: {id: value}, meta: articleData?.meta});
+									setAttributes({data: {id: value}, meta: articleData});
 								}}
 								options={articles}
 								onFilterValueChange={(inputValue) => onFilterValueChange(inputValue)}
 								__experimentalRenderItem={({item}) => {
 									return (
-										<div>
+										<div style={{display: 'inline-flex', alignItems: 'center'}}>
 											{
-												item?.meta?.avatar?.length > 0 &&
-												<img src={item.meta.avatar}
+												item?.avatar?.length > 0 &&
+												<img src={item.avatar}
 													 alt="" width="25" height="25" style={{marginRight: 10}}/>
 											}
 											<span>{item.label}</span>
