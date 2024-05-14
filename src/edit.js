@@ -101,7 +101,7 @@ export default function Edit(props) {
 				icon={<BlockIcon icon={icon}/>}
 				instructions={'Introduceti cel putin 3 caractere pentru a cauta in rezultate'}
 				label={"Run-Article"}>
-				<Panel style={{width: 'inherit'}}>
+				<div style={{width: 'inherit'}}>
 
 					<div style={{display: 'flex'}}>
 						<div>
@@ -142,7 +142,7 @@ export default function Edit(props) {
 						}
 					</div>
 
-				</Panel>
+				</div>
 			</Placeholder>
 		</BaseControl>
 	);
