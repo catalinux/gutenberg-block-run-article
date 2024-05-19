@@ -3,16 +3,13 @@
 	"apiVersion": 3,
 	"name": "run/article",
 	"version": "0.1.0",
-	"title": "Article",
-	"category": "text",
+	"title": "Articol",
+	"category": "widgets",
 	"icon": "smiley",
-	"description": "Exemplu bloc run-article",
+	"description": "Exemplu bloc articol",
 	"example": {
 		"attributes": {
 			"cover": "",
-			"author": "Imopedia",
-			"pages": "500",
-			"message": "Imopedia Article"
 		}
 	},
 	"supports": {
