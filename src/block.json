@@ -9,7 +9,7 @@
 	"description": "Exemplu bloc articol",
 	"example": {
 		"attributes": {
-			"cover": "",
+			"cover": ""
 		}
 	},
 	"supports": {
