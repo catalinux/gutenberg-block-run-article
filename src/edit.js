@@ -28,26 +28,30 @@ export default function Edit(props) {
 
 	const icon = <svg className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
 					  xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-			<path fill-rule="evenodd"
-				  d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm9.008-3.018a1.502 1.502 0 0 1 2.522 1.159v.024a1.44 1.44 0 0 1-1.493 1.418 1 1 0 0 0-1.037.999V14a1 1 0 1 0 2 0v-.539a3.44 3.44 0 0 0 2.529-3.256 3.502 3.502 0 0 0-7-.255 1 1 0 0 0 2 .076c.014-.398.187-.774.48-1.044Zm.982 7.026a1 1 0 1 0 0 2H12a1 1 0 1 0 0-2h-.01Z"
-				  clip-rule="evenodd"/>
-		</svg>;
+		<path fillRule="evenodd"
+			  d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm9.008-3.018a1.502 1.502 0 0 1 2.522 1.159v.024a1.44 1.44 0 0 1-1.493 1.418 1 1 0 0 0-1.037.999V14a1 1 0 1 0 2 0v-.539a3.44 3.44 0 0 0 2.529-3.256 3.502 3.502 0 0 0-7-.255 1 1 0 0 0 2 .076c.014-.398.187-.774.48-1.044Zm.982 7.026a1 1 0 1 0 0 2H12a1 1 0 1 0 0-2h-.01Z"
+			  clipRule="evenodd"/>
+	</svg>;
 
 	useEffect(() => {
 		init();
 	}, []);
 
-	const init = () => {
-		$.ajax({
-			url: options.apiUrl,
-			headers: { 'Authorization': 'Bearer ' + window.token },
-			success: (res) => {
-				processResponse(res.data);
-			},
-			fail: () => {
-				setArticles([]);
+	const init = async () => {
+		try {
+			const url = new URL(options.apiUrl);
+			if(options.extraQueryParams){
+				Object.keys(options.extraQueryParams).forEach(key => url.searchParams.append(key, options.extraQueryParams[key]));
 			}
-		});
+
+			const response = await fetch(url.toString(), {
+				headers: { 'Authorization': 'Bearer ' + window.token }
+			});
+			const res = await response.json();
+			processResponse(res.data);
+		} catch (error) {
+			setArticles([]);
+		}
 	}
 
 	const processResponse = (data) => {
@@ -65,33 +69,45 @@ export default function Edit(props) {
 		setArticles(list);
 	}
 
-	const onFilterValueChange = (search) => {
-		$.ajax({
-			url: options.apiUrl + '?filter[q]=' + search,
-			headers: { 'Authorization': 'Bearer ' + window.token },
-			success: (res) => {
-				processResponse(res.data);
-			},
-			fail: () => {
-				setArticles([]);
+	const onFilterValueChange = async (search) => {
+		try {
+			const url = new URL(options.apiUrl);
+			url.searchParams.append('filter[q]', search);
+			if(options.extraQueryParams){
+				Object.keys(options.extraQueryParams).forEach(key => url.searchParams.append(key, options.extraQueryParams[key]));
 			}
-		});
+
+			const response = await fetch(url.toString(), {
+				headers: { 'Authorization': 'Bearer ' + window.token }
+			});
+			const res = await response.json();
+			processResponse(res.data);
+		} catch (error) {
+			setArticles([]);
+		}
 	}
 
-	const reload = () => {
+	const reload = async () => {
 		if (id?.length > 0) {
-			$.ajax({
-				url: options.apiUrl + '/' + id,
-				headers: { 'Authorization': 'Bearer ' + window.token },
-				success: (res) => {
-					if (res.id) {
-						setAttributes({
-							data: {id: res.id},
-							meta: res.meta?.presenter?.dropdown
-						});
-					}
+			try {
+				const url = new URL(options.apiUrl + '/' + id);
+				if(options.extraQueryParams){
+					Object.keys(options.extraQueryParams).forEach(key => url.searchParams.append(key, options.extraQueryParams[key]));
 				}
-			});
+
+				const response = await fetch(url.toString(), {
+					headers: { 'Authorization': 'Bearer ' + window.token }
+				});
+				const res = await response.json();
+				if (res.id) {
+					setAttributes({
+						data: {id: res.id},
+						meta: res.meta?.presenter?.dropdown
+					});
+				}
+			} catch (error) {
+				// Handle error
+			}
 		}
 	}
 
@@ -100,7 +116,7 @@ export default function Edit(props) {
 			<Placeholder
 				icon={<BlockIcon icon={icon}/>}
 				instructions={'Introduceti cel putin 3 caractere pentru a cauta in rezultate'}
-				label={"Run-Article"}>
+				label={"Articol"}>
 				<div style={{width: 'inherit'}}>
 
 					<div style={{display: 'flex'}}>
@@ -147,3 +163,4 @@ export default function Edit(props) {
 		</BaseControl>
 	);
 }
+
